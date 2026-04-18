@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Technical Interview</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<nav>
+  <strong>HR Recruitment System</strong>
+  <a href="/index.html">Apply</a>
+  <a href="/dashboard.html">HR Dashboard</a>
+</nav>
+<div class="container">
+  <div class="card" id="interview-panel">
+    <h1>Technical Interview</h1>
+    <p id="status-msg">Connecting to interview session...</p>
+    <div id="timer" style="display:none;">30</div>
+    <div id="question-text" style="display:none;"></div>
+    <textarea id="answer-input" style="display:none;" placeholder="Type your answer here..."></textarea>
+    <br/>
+    <button id="submit-btn" class="btn btn-primary" style="display:none;">Submit Answer</button>
+    <div id="result-panel" style="display:none;"></div>
+  </div>
+
+  <!-- Screening section (shown after interview) -->
+  <div class="card" id="screening-panel" style="display:none;">
+    <h2>HR Screening Questions</h2>
+    <div id="screening-questions"></div>
+    <button id="screening-submit" class="btn btn-primary" style="margin-top:1rem;">Submit Screening</button>
+  </div>
+
+  <!-- Scheduling section -->
+  <div class="card" id="scheduling-panel" style="display:none;">
+    <h2>Schedule Your Interview</h2>
+    <label>Preferred Date</label>
+    <input type="date" id="pref-date"/>
+    <label>Preferred Time (UTC)</label>
+    <input type="time" id="pref-time"/>
+    <br/><br/>
+    <button id="schedule-btn" class="btn btn-success">Confirm Schedule</button>
+    <div id="schedule-result" style="margin-top:1rem;"></div>
+  </div>
+</div>
+
+<script src="/static/js/interview.js"></script>
+</body>
+</html>

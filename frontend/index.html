@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HR Recruitment — Apply</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<nav>
+  <strong>HR Recruitment System</strong>
+  <a href="/index.html">Apply</a>
+  <a href="/dashboard.html">HR Dashboard</a>
+</nav>
+<div class="container">
+  <div class="card">
+    <h1>Submit Your Application</h1>
+    <form id="apply-form" enctype="multipart/form-data">
+      <label>Select Job Role</label>
+      <select id="role-select" required></select>
+
+      <label>Upload Resume (PDF or DOCX)</label>
+      <input type="file" id="resume-file" accept=".pdf,.docx,.doc" required/>
+
+      <br/><br/>
+      <button type="submit" class="btn btn-primary">Submit Application</button>
+    </form>
+    <div id="result" style="margin-top:1rem;"></div>
+  </div>
+</div>
+<script>
+const API = '';
+
+async function loadRoles() {
+  const res = await fetch(`${API}/api/dashboard/roles`);
+  const roles = await res.json();
+  const sel = document.getElementById('role-select');
+  roles.forEach(r => {
+    const opt = document.createElement('option');
+    opt.value = r.id;
+    opt.textContent = `${r.title} (${r.experience_level})`;
+    sel.appendChild(opt);
+  });
+}
+
+document.getElementById('apply-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData();
+  fd.append('file', document.getElementById('resume-file').files[0]);
+  fd.append('job_role_id', document.getElementById('role-select').value);
+
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = '<em>Processing your resume... (this may take a few seconds)</em>';
+
+  let res, data;
+  try {
+    res = await fetch(`${API}/api/candidates/upload`, { method: 'POST', body: fd });
+    data = await res.json();
+  } catch (err) {
+    resultDiv.innerHTML = `<div class="card" style="background:#fee2e2;"><strong>Error:</strong> Could not connect to server. ${err}</div>`;
+    return;
+  }
+  if (!res.ok) {
+    resultDiv.innerHTML = `<div class="card" style="background:#fee2e2;"><strong>Server Error ${res.status}:</strong> ${data.detail || JSON.stringify(data)}</div>`;
+    return;
+  }
+
+  if (data.passed) {
+    resultDiv.innerHTML = `
+      <div class="card" style="background:#d1fae5;">
+        <strong>Congratulations, ${data.candidate_name}!</strong><br/>
+        ATS Score: <strong>${data.ats_score.toFixed(1)}%</strong><br/>
+        You have been shortlisted. Proceed to your <a href="/interview.html?id=${data.candidate_id}">Technical Interview</a>.
+      </div>`;
+  } else {
+    resultDiv.innerHTML = `
+      <div class="card" style="background:#fee2e2;">
+        <strong>Thank you for applying, ${data.candidate_name}.</strong><br/>
+        ATS Score: <strong>${data.ats_score.toFixed(1)}%</strong><br/>
+        We regret to inform you that your profile does not match our current requirements. A rejection email has been sent.
+      </div>`;
+  }
+});
+
+loadRoles();
+</script>
+</body>
+</html>

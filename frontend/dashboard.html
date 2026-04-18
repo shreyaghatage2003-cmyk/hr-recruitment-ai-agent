@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HR Dashboard</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<nav>
+  <strong>HR Recruitment System</strong>
+  <a href="/index.html">Apply</a>
+  <a href="/dashboard.html">HR Dashboard</a>
+</nav>
+<div class="container">
+
+  <!-- Stats -->
+  <div id="stats-grid" class="stats-grid"></div>
+
+  <!-- Candidates Table -->
+  <div class="card">
+    <h2>Candidates Pipeline</h2>
+    <div class="filter-row">
+      <div>
+        <label>Filter by Role</label>
+        <select id="filter-role"><option value="">All Roles</option></select>
+      </div>
+      <div>
+        <label>Filter by Stage</label>
+        <select id="filter-stage">
+          <option value="">All Stages</option>
+          <option>applied</option><option>ats_passed</option><option>ats_rejected</option>
+          <option>interview</option><option>screening</option><option>scheduled</option>
+          <option>hired</option><option>rejected</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="loadCandidates()">Filter</button>
+    </div>
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Stage</th><th>ATS</th><th>Interview</th><th>Actions</th></tr></thead>
+      <tbody id="candidates-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Create Role -->
+  <div class="card">
+    <h2>Create New Job Role</h2>
+    <form id="role-form">
+      <label>Title</label><input id="r-title" required/>
+      <label>Description</label><textarea id="r-desc" rows="3" required></textarea>
+      <label>Required Skills (comma-separated)</label><input id="r-skills" required/>
+      <label>Experience Level</label>
+      <select id="r-level"><option value="junior">Junior</option><option value="mid">Mid</option><option value="senior">Senior</option></select>
+      <label>Headcount Target</label><input id="r-headcount" type="number" value="1" min="1"/>
+      <br/><br/>
+      <button type="submit" class="btn btn-primary">Create Role</button>
+    </form>
+    <div id="role-result" style="margin-top:0.8rem;"></div>
+  </div>
+
+  <!-- HR Chatbot -->
+  <div class="card">
+    <h2>HR Assistant Chatbot</h2>
+    <div id="chat-box"></div>
+    <div class="chat-input-row">
+      <input type="text" id="chat-input" placeholder="Ask about candidates, stages, pipeline..."/>
+      <button class="btn btn-primary" onclick="sendChat()">Send</button>
+    </div>
+  </div>
+
+</div>
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>
